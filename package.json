@@ -1,0 +1,31 @@
+{
+  "name": "mermaid-extension-react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack-dev-server --open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.22.10",
+    "@babel/preset-env": "^7.22.10",
+    "@babel/preset-react": "^7.22.5",
+    "babel-loader": "^9.1.3",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@types/chrome": "^0.0.243",
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "mermaid": "^10.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
