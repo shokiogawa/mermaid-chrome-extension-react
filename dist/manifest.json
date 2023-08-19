@@ -4,7 +4,11 @@
   "version": "1.0.0",
   "manifest_version": 3,
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_title": "open side panel"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
   },
   "content_scripts": [
     {
@@ -18,5 +22,5 @@
       "matches": ["http://*/*", "https://*/*", "file:///*"]
     }
   ],
-  "permissions": ["tabs"]
+  "permissions": ["tabs", "sidePanel"]
 }

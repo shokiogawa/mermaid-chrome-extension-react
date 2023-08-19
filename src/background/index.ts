@@ -1,5 +1,5 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  const url = chrome.runtime.getURL("js/popup.html");
+  const url = chrome.runtime.getURL("../popup.html");
   chrome.windows.create({
     url: url,
     type: "popup",

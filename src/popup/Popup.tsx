@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { convertToMarmeidSvg, initMermaid } from "../api/api";
 
-const App: React.FC = () => {
+const Popup: React.FC = () => {
   const [mermaidText, setMarmaidText] = useState<string>();
 
   // マーメイド初期化
@@ -40,4 +40,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Popup;
