@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import Icon from "./Icon";
 import { createdtagName } from "../constant";
+import "../../styles/content/style.scss";
 
 document.addEventListener("selectionchange", () => {
   removeCreatedTag();

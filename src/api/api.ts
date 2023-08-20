@@ -1,22 +1,36 @@
 import mermaid from "mermaid";
 
+// 初期化
 export const initMermaid = () => {
-  mermaid.initialize({ startOnLoad: false });
+  try {
+    mermaid.initialize({ startOnLoad: false });
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 export const convertToMarmeidSvg = async (): Promise<void> => {
-  console.log("convertToMermaidSVG");
   await mermaid.run({
     querySelector: ".mermaid",
   });
 };
 
 // ダイアログを記載
-export const drawDiaglam = async (mermaidText: string): Promise<void> => {
-  var element = document.querySelector(".mermaid");
-  const { svg, bindFunctions } = await mermaid.render("mermaid", mermaidText);
-  if (element) {
-    element.innerHTML = svg;
-    bindFunctions?.(element);
+export const drawDiaglam = async (
+  mermaidText: string,
+  targetClassname: string
+): Promise<void> => {
+  try {
+    var element = document.querySelector(`.${targetClassname}`);
+    const { svg, bindFunctions } = await mermaid.render(
+      targetClassname,
+      mermaidText
+    );
+    if (element) {
+      element.innerHTML = svg;
+      bindFunctions?.(element);
+    }
+  } catch (err) {
+    console.error(err);
   }
 };

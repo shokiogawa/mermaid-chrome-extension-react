@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { initMermaid, drawDiaglam } from "../api/api";
+import { targetClassName } from "../constant";
 
 const Sidepanel: React.FC = () => {
   // マーメイド初期化
@@ -22,14 +23,18 @@ const Sidepanel: React.FC = () => {
 
   useEffect(() => {
     // 選択文字列が存在する場合、図に変換
-    if (mermaidText) drawDiaglam(mermaidText);
+    if (mermaidText) drawDiaglam(mermaidText, targetClassName);
   }, [mermaidText]);
 
   return (
     <main>
       <h1>Mermaid図</h1>
       <section className="chart-area">
-        {mermaidText ? <pre className="mermaid">{mermaidText}</pre> : <></>}
+        {mermaidText ? (
+          <pre className={targetClassName}>{mermaidText}</pre>
+        ) : (
+          <></>
+        )}
       </section>
     </main>
   );
