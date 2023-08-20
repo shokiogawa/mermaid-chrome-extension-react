@@ -16,6 +16,9 @@
       "js": ["js/content.js"]
     }
   ],
+  "background": {
+    "service_worker": "js/background.js"
+  },
   "web_accessible_resources": [
     {
       "resources": ["js/popup.html"],
