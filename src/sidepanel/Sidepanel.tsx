@@ -12,29 +12,31 @@ const Sidepanel: React.FC = () => {
       sender,
       sendResponse
     ) {
-      if (message.selectedText) {
-        setMarmaidText(message.selectedText);
+      if (message.mermaidTextList) {
+        setMarmaidTextList(message.mermaidTextList);
       }
     });
   };
   requestSelectTextToScriptHandler();
 
-  const [mermaidText, setMarmaidText] = useState<string>();
+  const [mermaidTextList, setMarmaidTextList] = useState<string[]>();
 
   useEffect(() => {
     // 選択文字列が存在する場合、図に変換
-    if (mermaidText) drawDiaglam(mermaidText, targetClassName);
-  }, [mermaidText]);
+    if (mermaidTextList) drawDiaglam(targetClassName);
+    console.log(mermaidTextList);
+  }, [mermaidTextList]);
 
   return (
     <main>
       <h1>Mermaid図</h1>
       <section className="chart-area">
-        {mermaidText ? (
-          <pre className={targetClassName}>{mermaidText}</pre>
-        ) : (
-          <></>
-        )}
+        {mermaidTextList &&
+          mermaidTextList.map((mermaidText) => (
+            <div>
+              <pre className={targetClassName}>{mermaidText}</pre>
+            </div>
+          ))}
       </section>
     </main>
   );

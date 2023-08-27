@@ -1,9 +1,11 @@
 import "../../styles/content/style.scss";
 import mermaid from "mermaid";
 import { renderMermaidDialog } from "./mermaid-render";
+import { sendMessageInit } from "./Icon";
 
 window.onload = async () => {
   await init();
+  sendMessageInit();
 };
 
 // 初期処理
