@@ -2,6 +2,8 @@ import mermaid from "mermaid";
 const extensionId = "mermaid-diagram-renderer";
 
 type RenderTarget = {
+  // id
+  id: string;
   // mermaid図に置き換える要素を指定
   replaceElement: HTMLElement;
   // マーメイドテキストを指定
@@ -16,9 +18,10 @@ export const renderMermaidDialog = async () => {
       `pre[lang="test"]:not(.unchanged):not([${extensionId}="processed"])`
     )
   ).map((element) => {
+    const id = idGenerator.next().value;
     const replaceElement = element.parentElement!;
     const mermaidText = element.querySelector("code")!.innerText;
-    return { replaceElement, mermaidText };
+    return { id, replaceElement, mermaidText };
   });
 
   // 各要素をレンダリング
@@ -33,13 +36,10 @@ const render = async (targetElement: RenderTarget): Promise<void> => {
   const container = document.createElement("div");
   container.setAttribute(extensionId, "processed");
 
-  console.log(targetElement.mermaidText);
-  // 入れ替え
-  console.log(targetElement.replaceElement);
   targetElement.replaceElement.replaceWith(container);
   try {
     const { svg, bindFunctions } = await mermaid.render(
-      idGenerator.next().value,
+      targetElement.id,
       targetElement.mermaidText
     );
     // 画像を挿入
