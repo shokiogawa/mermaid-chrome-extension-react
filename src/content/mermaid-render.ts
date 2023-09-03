@@ -1,4 +1,6 @@
 import mermaid from "mermaid";
+import * as d3 from "d3";
+
 const extensionId = "mermaid-diagram-renderer";
 
 type RenderTarget = {
@@ -35,6 +37,7 @@ const render = async (targetElement: RenderTarget): Promise<void> => {
   // mermaidの図を挿入する要素を作成
   const container = document.createElement("div");
   container.setAttribute(extensionId, "processed");
+  container.classList.add("mermaid");
 
   targetElement.replaceElement.replaceWith(container);
   try {
@@ -64,6 +67,22 @@ const idGenerator = (function* () {
     ++i;
   }
 })();
+
+export const attachD3 = () => {
+  console.log("attachD3");
+  const svgs = d3.selectAll<SVGSVGElement, unknown>(".mermaid svg");
+  console.log(svgs);
+  svgs.each(function () {
+    const svg = d3.select(this);
+    console.log(svg);
+    svg.html("<g>" + svg.html() + "</g>");
+    const inner = svg.select<SVGGElement>("g");
+    const zoom = d3.zoom<SVGSVGElement, unknown>().on("zoom", function (event) {
+      inner.attr("transform", event.transform);
+    });
+    svg.call(zoom);
+  });
+};
 // const targetFirstMark = "'''mermaid";
 // const targetLastMark = "'''";
 // export const renderMermaidForWiki = async (): Promise<void> => {
