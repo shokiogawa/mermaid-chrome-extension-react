@@ -13,7 +13,36 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*", "file:///*"],
-      "js": ["js/content.js"]
+      "js": [
+        "js/content.js",
+        "js/121.js",
+        "js/174.js",
+        "js/288.js",
+        "js/290.js",
+        "js/304.js",
+        "js/329.js",
+        "js/350.js",
+        "js/384.js",
+        "js/397.js",
+        "js/437.js",
+        "js/451.js",
+        "js/527.js",
+        "js/542.js",
+        "js/571.js",
+        "js/576.js",
+        "js/582.js",
+        "js/672.js",
+        "js/692.js",
+        "js/724.js",
+        "js/809.js",
+        "js/825.js",
+        "js/882.js",
+        "js/900.js",
+        "js/905.js",
+        "js/913.js",
+        "js/948.js",
+        "js/958.js"
+      ]
     }
   ],
   "background": {

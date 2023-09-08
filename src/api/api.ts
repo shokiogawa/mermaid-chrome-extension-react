@@ -1,29 +1,22 @@
 import mermaid from "mermaid";
+import * as d3 from "d3";
 
-// 初期化
-export const initMermaid = () => {
-  try {
-    mermaid.initialize({ startOnLoad: false });
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-export const convertToMarmeidSvg = async (): Promise<void> => {
+// 1つのみ変換する
+export const renderMermaid = async (target: string): Promise<void> => {
   await mermaid.run({
-    querySelector: ".mermaid",
+    querySelector: target,
   });
 };
 
-// ダイアログを記載
-export const drawDiaglam = async (
+// 1つづつ図に変換する
+export const drawDiaglamOne = async (
   mermaidText: string,
-  targetClassname: string
+  target: string
 ): Promise<void> => {
   try {
-    var element = document.querySelector(`.${targetClassname}`);
+    var element = document.querySelector(`#${target}`);
     const { svg, bindFunctions } = await mermaid.render(
-      targetClassname,
+      `${target}-svg`,
       mermaidText
     );
     if (element) {
@@ -33,4 +26,17 @@ export const drawDiaglam = async (
   } catch (err) {
     console.error(err);
   }
+};
+
+export const attachD3 = (target: string) => {
+  const svgs = d3.selectAll<SVGSVGElement, unknown>(target);
+  svgs.each(function () {
+    const svg = d3.select(this);
+    svg.html("<g>" + svg.html() + "</g>");
+    const inner = svg.select<SVGGElement>("g");
+    const zoom = d3.zoom<SVGSVGElement, unknown>().on("zoom", function (event) {
+      inner.attr("transform", event.transform);
+    });
+    svg.call(zoom);
+  });
 };
