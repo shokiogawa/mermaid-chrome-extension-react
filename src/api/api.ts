@@ -1,50 +1,42 @@
 import mermaid from "mermaid";
-const extensionId = "mermaid-diagram-renderer";
-// 初期化
-export const initMermaid = () => {
+import * as d3 from "d3";
+
+// 1つのみ変換する
+export const renderMermaid = async (target: string): Promise<void> => {
+  await mermaid.run({
+    querySelector: target,
+  });
+};
+
+// 1つづつ図に変換する
+export const drawDiaglamOne = async (
+  mermaidText: string,
+  target: string
+): Promise<void> => {
   try {
-    mermaid.initialize({ startOnLoad: false });
+    var element = document.querySelector(`#${target}`);
+    const { svg, bindFunctions } = await mermaid.render(
+      `${target}-svg`,
+      mermaidText
+    );
+    if (element) {
+      element.innerHTML = svg;
+      bindFunctions?.(element);
+    }
   } catch (err) {
     console.error(err);
   }
 };
 
-export const convertToMarmeidSvg = async (): Promise<void> => {
-  await mermaid.run({
-    querySelector: ".mermaid",
+export const attachD3 = (target: string) => {
+  const svgs = d3.selectAll<SVGSVGElement, unknown>(target);
+  svgs.each(function () {
+    const svg = d3.select(this);
+    svg.html("<g>" + svg.html() + "</g>");
+    const inner = svg.select<SVGGElement>("g");
+    const zoom = d3.zoom<SVGSVGElement, unknown>().on("zoom", function (event) {
+      inner.attr("transform", event.transform);
+    });
+    svg.call(zoom);
   });
 };
-
-// ダイアログを記載
-export const drawDiaglam = async (targetClassname: string): Promise<void> => {
-  var targetElements = document.querySelectorAll(`.${targetClassname}`);
-  targetElements.forEach((elem) => {
-    console.log(elem);
-  });
-  // targetElements.forEach(async (element) => {
-  //   console.log(element);
-  //   const mermaidText = element.textContent;
-  //   console.log(mermaidText);
-
-  //   if (mermaidText) {
-  //     try {
-  //       const { svg, bindFunctions } = await mermaid.render(
-  //         idGenerator.next().value,
-  //         mermaidText
-  //       );
-  //       element.innerHTML = svg;
-  //       bindFunctions?.(element);
-  //     } catch (err: any) {
-  //       element.innerHTML = mermaidText;
-  //     }
-  //   }
-  // });
-};
-
-const idGenerator = (function* () {
-  let i = 1;
-  while (true) {
-    yield `${extensionId}-${i}`;
-    ++i;
-  }
-})();
