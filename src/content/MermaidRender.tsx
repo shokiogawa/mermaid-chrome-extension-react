@@ -7,6 +7,7 @@ import Modal from "./Modal ";
 const extensionId = "mermaid-diagram-renderer";
 const test1 = `pre[lang="test"]:not(.unchanged):not([${extensionId}="processed"])`;
 const test2 = `.lang-mermaid:not(.unchanged):not([${extensionId}="processed"])`;
+const test3 = `#loom .loom_code:not(.unchanged):not([${extensionId}="processed"])`;
 
 const MermaidRender: React.FC<RenderTarget> = ({
   id,
@@ -16,7 +17,6 @@ const MermaidRender: React.FC<RenderTarget> = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const showDialogHandler = () => {
-    console.log(mermaidText);
     setIsOpen(true);
   };
 
@@ -45,23 +45,24 @@ const MermaidRender: React.FC<RenderTarget> = ({
 
 export const addReactComponent = async () => {
   // 該当要素取得
-  const targetElement = document.querySelectorAll(test2);
-
+  const targetElement = document.querySelectorAll(test3);
+  if (!targetElement) return;
   // レンダー
   targetElement.forEach((elem) => {
     const id = idGenerator.next().value;
-    const mermaidText = elem.querySelector("code")!.innerText;
-    elem.setAttribute(extensionId, "processed");
-    const root = createRoot(elem);
-    root.render(
-      <MermaidRender
-        id={id}
-        mermaidText={mermaidText}
-        className={"mermaid-target"}
-      />
-    );
+    const mermaidText = elem.textContent;
+    if (mermaidText) {
+      elem.setAttribute(extensionId, "processed");
+      const root = createRoot(elem);
+      root.render(
+        <MermaidRender
+          id={id}
+          mermaidText={mermaidText}
+          className={"mermaid-target"}
+        />
+      );
+    }
   });
-
   await mermaid.run({
     nodes: document.querySelectorAll(`.mermaid-target`),
   });
