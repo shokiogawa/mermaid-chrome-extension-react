@@ -1,33 +1,29 @@
 import mermaid from "mermaid";
 import * as d3 from "d3";
 
-// 1つのみ変換する
+/**
+ 【概要】Mermaidテキストかどうかのチェック
+ **/
+export const isMermaidText = (text: string): string | null => {
+  try {
+    return mermaid.detectType(text);
+  } catch (err) {
+    return null;
+  }
+};
+
+/**
+ 【概要】Mermaidの図に変換
+ **/
 export const renderMermaid = async (target: string): Promise<void> => {
   await mermaid.run({
     querySelector: target,
   });
 };
 
-// 1つづつ図に変換する
-export const drawDiaglamOne = async (
-  mermaidText: string,
-  target: string
-): Promise<void> => {
-  try {
-    var element = document.querySelector(`#${target}`);
-    const { svg, bindFunctions } = await mermaid.render(
-      `${target}-svg`,
-      mermaidText
-    );
-    if (element) {
-      element.innerHTML = svg;
-      bindFunctions?.(element);
-    }
-  } catch (err) {
-    console.error(err);
-  }
-};
-
+/**
+ 【概要】引数の要素に対して、svg図を拡大縮小処理を追加
+ **/
 export const attachD3 = (target: string) => {
   const svgs = d3.selectAll<SVGSVGElement, unknown>(target);
   svgs.each(function () {
