@@ -16,7 +16,6 @@ export const MermaidRender: React.FC<RenderTarget> = ({
   const closeDialodHandler = () => {
     setIsOpen(false);
   };
-
   return (
     <>
       <div

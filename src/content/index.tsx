@@ -48,25 +48,25 @@ const init = () => {
 const renderMermaid = async () => {
   // 該当要素取得
   const targetElement = document.querySelectorAll(test3);
-  if (!targetElement) return;
-  // レンダー
-  targetElement.forEach((elem) => {
-    const id = idGenerator.next().value;
-    const mermaidText = elem.textContent;
-    // mermaid変換が必要かどうかチェック
-    if (mermaidText && isMermaidText(mermaidText)) {
-      elem.setAttribute(extensionId, "processed");
-      const root = createRoot(elem);
-      root.render(
-        <MermaidRender
-          id={id}
-          mermaidText={mermaidText}
-          className={"mermaid-target"}
-        />
-      );
-    }
-  });
-  // Mermaid図に変換
+  if (targetElement.length !== 0) {
+    // レンダー
+    targetElement.forEach((elem) => {
+      const id = idGenerator.next().value;
+      const mermaidText = elem.textContent;
+      // mermaid変換が必要かどうかチェック
+      if (mermaidText && isMermaidText(mermaidText)) {
+        elem.setAttribute(extensionId, "processed");
+        const root = createRoot(elem);
+        root.render(
+          <MermaidRender
+            id={id}
+            mermaidText={mermaidText}
+            className={"mermaid-target"}
+          />
+        );
+      }
+    });
+  }
   await mermaid.run({
     nodes: document.querySelectorAll(`.mermaid-target`),
     suppressErrors: true,
