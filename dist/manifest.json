@@ -54,5 +54,5 @@
       "matches": ["http://*/*", "https://*/*", "file:///*"]
     }
   ],
-  "permissions": ["tabs", "sidePanel"]
+  "permissions": ["tabs", "sidePanel", "storage"]
 }

@@ -1,5 +1,7 @@
 import mermaid from "mermaid";
 import * as d3 from "d3";
+import { getBucket } from "@extend-chrome/storage";
+import { TargetUrlBucket } from "../types/TargetUrl";
 
 /**
  【概要】Mermaidテキストかどうかのチェック
@@ -36,3 +38,11 @@ export const attachD3 = (target: string) => {
     svg.call(zoom);
   });
 };
+
+/**
+ 【概要】バケット取得
+ */
+export const targetUrlBucket = getBucket<TargetUrlBucket>(
+  "targetUrlBucket",
+  "sync"
+);

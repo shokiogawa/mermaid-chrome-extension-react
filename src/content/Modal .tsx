@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import mermaid from "mermaid";
 import { attachD3, renderMermaid } from "../api/api";
 
 type Props = {
