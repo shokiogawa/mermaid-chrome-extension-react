@@ -40,22 +40,50 @@ const Popup = () => {
     }
   };
 
+  //削除ハンドラー
+  const deleteHandler = (deleteUrl: TargetUrl) => {
+    const updateTargetUrl = targetUrls?.filter((targetUrl) => {
+      return targetUrl !== deleteUrl;
+    });
+    targetUrlBucket.set({ targetUrls: updateTargetUrl });
+    setTargetUrls(updateTargetUrl);
+  };
+
   useEffect(() => {
     getTargetUrls();
   });
   return (
-    <section className="popup">
-      <div className="show-url-list">
-        <ul>
-          {targetUrls && targetUrls.length !== 0 ? (
-            targetUrls.map((targetUrl) => <li>{targetUrl.url}</li>)
-          ) : (
-            <></>
-          )}
-        </ul>
-      </div>
-      <div className="input-url">
-        <form onSubmit={submitHandler}>
+    <main className="popup">
+      <section className="list-area">
+        {targetUrls && targetUrls.length !== 0 ? (
+          <table className="table" border={1}>
+            <tr className="title">
+              <th>URL</th>
+              <th>要素</th>
+              <th>操作</th>
+            </tr>
+            {targetUrls.map((targetUrl) => (
+              <tr className="content">
+                <th>{targetUrl.url}</th>
+                <th>{targetUrl.element}</th>
+                <th>
+                  <button
+                    onClick={() => {
+                      deleteHandler(targetUrl);
+                    }}
+                  >
+                    削除
+                  </button>
+                </th>
+              </tr>
+            ))}
+          </table>
+        ) : (
+          <></>
+        )}
+      </section>
+      <section className="input-area">
+        <form onSubmit={submitHandler} className="form">
           <label>
             URL
             <input type="text" name="url" />
@@ -64,10 +92,17 @@ const Popup = () => {
             要素
             <input type="text" name="element" />
           </label>
-          <input type="submit" value="Submit" />
+          <input type="submit" value="登録" />
         </form>
-      </div>
-    </section>
+        <div className="explanation">
+          <p>要素は、mermaidテキストが存在するタグをjqueryっぽく指定すること</p>
+          <p>例 class名がtestの場合、「.test」、id名がtestの場合「#test」</p>
+          <p className="mark">
+            Backlogのwikiの場合は、「#loom .loom_code」を指定すること
+          </p>
+        </div>
+      </section>
+    </main>
   );
 };
 

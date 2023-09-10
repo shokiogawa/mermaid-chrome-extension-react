@@ -1,4 +1,26 @@
 .popup {
-  width: 300px;
+  width: 500px;
   height: 300px;
+  .list-area {
+    padding-bottom: 5px;
+    .table {
+      border-collapse: collapse;
+    }
+  }
+  .input-area {
+    .form {
+      label {
+        display: block;
+      }
+    }
+    .explanation {
+      p {
+        margin: 0px;
+        padding: 0px;
+      }
+      .mark {
+        color: red;
+      }
+    }
+  }
 }
