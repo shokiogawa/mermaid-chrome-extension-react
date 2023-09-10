@@ -25,6 +25,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@extend-chrome/storage": "^1.5.0",
     "@types/chrome": "^0.0.243",
     "@types/d3": "^7.4.0",
     "@types/react": "^18.2.20",

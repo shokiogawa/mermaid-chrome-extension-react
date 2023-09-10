@@ -1,21 +1,54 @@
 import "../../styles/content/style.scss";
 import mermaid from "mermaid";
 import { MermaidRender } from "./MermaidRender";
-import { isMermaidText } from "../api/api";
+import { isMermaidText, targetUrlBucket } from "../api/api";
 import { createRoot } from "react-dom/client";
 import { extensionId } from "../constant";
-import { idGenerator } from "../utility";
+import { idGenerator, wildcardToRegex } from "../utility";
+import { TargetUrl, TargetUrlBucket } from "../types/TargetUrl";
 
+const base = `:not(.unchanged):not([${extensionId}="processed"])`;
 const test1 = `pre[lang="test"]:not(.unchanged):not([${extensionId}="processed"])`;
 const test2 = `.lang-mermaid:not(.unchanged):not([${extensionId}="processed"])`;
 const test3 = `#loom .loom_code:not(.unchanged):not([${extensionId}="processed"])`;
 
-window.onload = () => {
-  init();
+window.onload = async () => {
+  const targetUrl = await checkCurrentUrlIsTargetUrl();
+
+  if (!targetUrl) return;
+  init(targetUrl);
+};
+
+/**
+ * 現在のURLが対象のURLであるかどうかのチェックを行う。
+ * 対象のUrlの場合、Urlと要素を返す。対象のURLではない場合、nullを返す。
+ * @returns TargetUrl or null
+ */
+const checkCurrentUrlIsTargetUrl = async (): Promise<TargetUrl | null> => {
+  const currentUrl = location.href;
+  const bucket: TargetUrlBucket = await targetUrlBucket.get();
+  if (!bucket.targetUrls) return null;
+
+  // 優先度1: マッチする場合を検索
+  const targetUrl = bucket.targetUrls.find((targetUrl: TargetUrl) => {
+    return targetUrl.url === currentUrl;
+  });
+
+  // 優先度2: ワイルドカードを検索
+  if (!targetUrl) {
+    const targetUrlWildCard = bucket.targetUrls.find((targetUrl: TargetUrl) => {
+      const regex = wildcardToRegex(targetUrl.url);
+      return regex.test(currentUrl);
+    });
+    if (!targetUrlWildCard) return null;
+    return targetUrlWildCard;
+  }
+
+  return targetUrl;
 };
 
 // 初期処理
-const init = () => {
+const init = (targetUrl: TargetUrl) => {
   // Mermaidの初期設定
   mermaid.initialize({
     startOnLoad: false,
@@ -23,14 +56,20 @@ const init = () => {
 
   // Mermaidのレンダー処理
   if (document.body !== null) {
-    new MutationObserver(renderMermaid).observe(document.body, {
+    const callback = (targetUrl: TargetUrl) => {
+      return (mutationsList: MutationRecord[], observer: MutationObserver) => {
+        // renderMermaidメソッドを呼び出し、引数argを渡す
+        renderMermaid(targetUrl);
+      };
+    };
+    new MutationObserver(callback(targetUrl)).observe(document.body, {
       childList: true,
       subtree: true,
     });
   }
 
   // レンダー処理
-  renderMermaid();
+  renderMermaid(targetUrl);
 };
 
 // レンダー処理
@@ -45,9 +84,11 @@ const init = () => {
  3. Mermaidテキストである場合は、className=mermaid-targetがついた要素を差し込む
  4. Mermaidテキストをレンダリングし、svgの図を挿入する。
 **/
-const renderMermaid = async () => {
+const renderMermaid = async (targetUrl: TargetUrl) => {
   // 該当要素取得
-  const targetElement = document.querySelectorAll(test3);
+  const targetElement = document.querySelectorAll(
+    `${targetUrl.element}${base}`
+  );
   if (targetElement.length !== 0) {
     // レンダー
     targetElement.forEach((elem) => {
