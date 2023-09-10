@@ -1,43 +1,30 @@
-# Meamaid の図を表示させる
+# Mermaid Preview Zoom
 
-## 使用技術
+## Usage
 
-- typescript
-- webpack
-- sass
-- react
+1. Add Url and tag that you want to render mermaid figure on popup.
 
-## シーケンス図
+2. Move to url you register on step 1.
 
-- content_script
-- sidepanel
+3. You can see the mermaid previe
 
-```mermaid
-sequenceDiagram
-    participant ユーザー
-    participant content_script
-    participant sidepanel
-    ユーザー->>content_script: mermaid記法の文字列を選択
-    content_script->>ユーザー: ボタン表示
-    ユーザー->>content_script: ボタン押下
-    content_script->>sidepanel: 選択文字列を送信
-    sidepanel->>sidepanel: mermaid apiでsvgタグ作成
-    sidepanel->>sidepanel: 図を表示
-```
+4. Tap mermaid figure rendered by this chrome extension.
 
-## 環境構築
+5. you can zoom figure.
+
+## For Developer
 
 1. git clone
 
 ```
-https://github.com/shokiogawa/mermaid-chrome-extension-react.git
+git clone https://github.com/shokiogawa/mermaid-chrome-extension-react.git
 ```
 
 2. yarn
 3. yarn build
-4. dist フォルダに成果物が作成される。
-5. chrome 拡張機能管理画面を開き、dist 配下のデータを登録
+4. You can find output in dist folder.
+5. Open the chrome setting page and register output you get on step 4.
 
-## 参考
+## References
 
 https://mermaid.js.org/config/usage.html
